@@ -14,11 +14,11 @@ jobs:
       - id: escape
         name: Check for escape chars
         run: |
-          if [${{ contains(github.event.inputs.test, '"') }}]
+          if [ ${{ contains(github.event.inputs.test, '"') }} ]
           then
-              echo "::set-output name=escape::pass"
-          else
               echo "::set-output name=escape::fail"
+          else
+              echo "::set-output name=escape::pass"
           fi
   chromatic:
     runs-on: ubuntu-latest
