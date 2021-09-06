@@ -31,7 +31,7 @@ jobs:
               exit 0
           fi
       - id: debug
-        - run: echo ${{ fromJson(steps.get_pull.outputs.data).head.label }}
+        run: echo ${{ fromJson(steps.get_pull.outputs.data).head.label }}
         
   chromatic:
     needs: check
