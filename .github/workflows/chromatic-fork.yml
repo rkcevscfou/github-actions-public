@@ -23,7 +23,7 @@ jobs:
       - id: escape
         name: Check for escape chars
         run: |
-          if ${{ fromJson(steps.get_pull.outputs.data).head.label, '"') }}
+          if ${{ contains(fromJson(steps.get_pull.outputs.data).head.label, '"') }}
           then
             exit 1
           else
