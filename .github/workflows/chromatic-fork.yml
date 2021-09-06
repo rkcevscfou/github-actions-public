@@ -27,7 +27,7 @@ jobs:
         pull_number: ${{ github.event.inputs.number }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - run: echo "Data ${{ fromJson(steps.get_branch_name.outputs.data) }}"
+    - run: echo "Data ${{ fromJson(steps.get_branch_name.outputs.data).head.label }}"
     # - uses: actions/setup-node@v1
     #   with:
     #     node-version: '>=14.16.0 14'
