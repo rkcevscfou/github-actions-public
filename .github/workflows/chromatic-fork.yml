@@ -25,6 +25,8 @@ jobs:
         owner: rkcevscfou
         repo: github-actions-private
         pull_number: ${{ github.event.inputs.number }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - run: echo "Data ${{ fromJson(steps.get_branch_name.outputs.data) }}"
     # - uses: actions/setup-node@v1
     #   with:
