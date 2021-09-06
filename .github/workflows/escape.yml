@@ -22,7 +22,6 @@ jobs:
         fi
   chromatic:
     needs: check
-    if: needs.check.outputs.status == 'success'
     runs-on: ubuntu-latest
     steps:  
       - run: echo --branch-name="${{ github.event.inputs.test }}"
