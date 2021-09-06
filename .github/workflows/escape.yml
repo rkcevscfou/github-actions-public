@@ -13,7 +13,7 @@ jobs:
     steps:
       - id: escape
         name: Check for escape chars
-        if: ${!contains(github.event.inputs.test, '"')}
+        if: ${{ !contains(github.event.inputs.test, '"') }}
         run: success()
   chromatic:
     runs-on: ubuntu-latest
