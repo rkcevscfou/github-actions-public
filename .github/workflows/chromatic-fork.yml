@@ -9,7 +9,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     outputs:
-      status: ${{ steps.escape.conclusion }
+      status: ${{ steps.escape.conclusion }}
       branch_name: ${{ fromJson(steps.get_pull.outputs.data).head.label }}
     steps:
       - id: get_pull
