@@ -1,0 +1,12 @@
+name: Manually triggered workflow
+on:
+  workflow_dispatch:
+    inputs:
+      test:
+        description: 'Input'
+        required: true
+jobs:
+  chromatic:
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo --branch-name="${{ github.event.inputs.test }}"
