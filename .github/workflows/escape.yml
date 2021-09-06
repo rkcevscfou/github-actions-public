@@ -1,4 +1,4 @@
-name: Manually triggered workflow escape
+name: Manually triggered workflow
 on:
   workflow_dispatch:
     inputs:
@@ -7,20 +7,20 @@ on:
         required: true
 jobs:
   check:
-    runs-on: ubuntu-latest
-    steps:
+      outputs:
+        status: ${{ steps.escape.conclusion }}
+      steps:
       - id: escape
         name: Check for escape chars
         run: |
-          if [ ${{ contains(github.event.inputs.test, '"') }} ]
+          if ${{ contains(github.event.inputs.test, '"') }}
           then
-              echo "::set-output name=escape::fail"
+             exit 1
           else
-              echo "::set-output name=escape::pass"
+              exit 0
           fi
   chromatic:
-    runs-on: ubuntu-latest
     needs: check
-    if: needs.check.outputs.escape == 'pass'
+    if: needs.check.outputs.status == 'success'
     steps:  
-      - run: echo ${{ github.event.inputs.test }}"
+      - run: echo --branch-name="${{ github.event.inputs.test }}"
