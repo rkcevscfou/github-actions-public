@@ -6,7 +6,16 @@ on:
         description: 'Input'
         required: true
 jobs:
+  check:
+      outputs:
+        status: ${{ steps.escape.conclusion }}
+      steps:
+        - id: escape
+          name: Check for escape chars
+          if: ${!contains(github.event.inputs.test, '"')}
+          run: success()
   chromatic:
-    runs-on: ubuntu-latest
-    steps:
-    - run: echo --branch-name="${{ github.event.inputs.test }}"
+    needs: check
+    if: needs.check.outputs.status == 'success'
+    steps:  
+      - run: echo --branch-name="${{ github.event.inputs.test }}"
