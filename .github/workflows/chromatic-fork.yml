@@ -1,4 +1,4 @@
-name: Manually triggered workflow
+name: Forked PR
 on:
   workflow_dispatch:
     inputs:
@@ -6,7 +6,27 @@ on:
         description: 'Pull Request Number'
         required: true
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.escape.conclusion }
+      branch_name: ${{ fromJson(steps.get_pull.outputs.data).head.label }}
+    steps:
+      - id: get_pull
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{owner}/{repo}/pulls/{pull_number}
+          owner: ${{ github.event.repository.owner.login }}
+          repo: ${{ github.event.repository.name }}
+          pull_number: ${{ github.event.inputs.number }}
+      - id: escape
+        name: Check for escape chars
+        if: ${{ !contains(fromJson(steps.get_pull.outputs.data).head.label, '"') }}
+        run: exit 0
+        
   chromatic:
+    needs: check
+    if: needs.check.outputs.status == 'success'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -26,4 +46,4 @@ jobs:
       with:
         node-version: '>=14.16.0 14'
     - run: npm ci
-    - run: npx chromatic --project-token ${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-once-uploaded --branch-name="${{ fromJson(steps.get_branch_name.outputs.data).head.label }}"
+    - run: npx chromatic@latest --project-token ${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-once-uploaded --branch-name="${{ needs.check.output.branch_name }}"
