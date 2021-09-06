@@ -14,7 +14,7 @@ jobs:
       - id: escape
         name: Check for escape chars
         if: ${{ !contains(github.event.inputs.test, '"') }}
-        run: success()
+        run: exit 0
   chromatic:
     runs-on: ubuntu-latest
     needs: check
