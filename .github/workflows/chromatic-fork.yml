@@ -23,8 +23,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: escape
         name: Check for escape chars
-        if: ${{ !contains(fromJson(steps.get_pull.outputs.data).head.label, '"') }}
-        run: exit 0
+        if: ${{ contains(fromJson(steps.get_pull.outputs.data).head.label, '"') }}
+        run: exit 1
         
   chromatic:
     needs: check

@@ -13,11 +13,16 @@ jobs:
     steps:
       - id: escape
         name: Check for escape chars
-        if: ${{ !contains(github.event.inputs.test, '"') }}
-        run: exit 0
+        run: |
+          if [${{ contains(github.event.inputs.test, '"') }}]
+          then
+              echo "::set-output name=escape::pass"
+          else
+              echo "::set-output name=escape::fail"
+          fi
   chromatic:
     runs-on: ubuntu-latest
     needs: check
-    if: needs.check.outputs.status == 'success'
+    if: needs.check.outputs.escape == 'pass'
     steps:  
-      - run: echo --branch-name="${{ github.event.inputs.test }}"
+      - run: echo ${{ github.event.inputs.test }}"
