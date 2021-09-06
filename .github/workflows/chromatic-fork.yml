@@ -6,11 +6,6 @@ on:
         description: 'Pull Request Number'
         required: true
 jobs:
-  say_hello:
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "Hello ${{ github.event.inputs.number }}!"
   chromatic:
     runs-on: ubuntu-latest
     steps:
@@ -27,9 +22,8 @@ jobs:
         pull_number: ${{ github.event.inputs.number }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - run: echo "Data ${{ fromJson(steps.get_branch_name.outputs.data).head.label }}"
-    # - uses: actions/setup-node@v1
-    #   with:
-    #     node-version: '>=14.16.0 14'
-    # - run: npm ci
-    # - run: npx chromatic --project-token ${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-once-uploaded
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '>=14.16.0 14'
+    - run: npm ci
+    - run: npx chromatic --project-token ${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-once-uploaded --branch-name="${{ fromJson(steps.get_branch_name.outputs.data).head.label }}"
