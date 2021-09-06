@@ -37,4 +37,4 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     steps:
-    - run: echo "${{ needs.check.output.branch_name }}"
+    - run: echo "${{ needs.check.outputs.branch_name }}"
