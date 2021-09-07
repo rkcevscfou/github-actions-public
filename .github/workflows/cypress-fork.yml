@@ -74,10 +74,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2.10.2
         with:
-          record: true
-          parallel: true
-          group: ubuntu-regression
-          quiet: true
           browser: chrome
         env:
           # pass the Dashboard record key as an environment variable
