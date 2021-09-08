@@ -15,6 +15,6 @@ jobs:
           owner: ${{ github.event.repository.owner.login }}
           repo: ${{ github.event.repository.name }}
           workflow_id: 'cypress.yml'
-          ref: 'refs/pull/${{ github.event.inputs.number }}/head'
+          ref: '${{ github.ref }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
