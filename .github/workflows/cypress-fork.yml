@@ -74,7 +74,11 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2.10.2
         with:
+          install: false
           browser: chrome
+          record: true
+          group: ubuntu-regression
         env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           CI: "true"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
