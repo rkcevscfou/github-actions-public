@@ -42,7 +42,7 @@ jobs:
           repo: ${{ github.event.repository.name }}
           workflow_id: "cypress.yml"
           ref: "main"
-          inputs: '{"number": "${{ github.event.inputs.number }}"}'
+          inputs: '{"number": "${{ github.event.inputs.number }}", "branch": "${{ github.head_ref }}"}'
         env:
           GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
 
