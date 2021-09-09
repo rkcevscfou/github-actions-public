@@ -1,4 +1,4 @@
-name: Cypress Forked PR
+name: Cypress
 
 on:
   workflow_dispatch:
@@ -6,36 +6,10 @@ on:
       number:
         description: "Pull Request Number"
         required: true
-
 jobs:
-  check:
-    runs-on: ubuntu-latest
-    outputs:
-      branch_name: ${{ fromJson(steps.get_pull.outputs.data).head.label }}
-    steps:
-      - id: get_pull
-        uses: octokit/request-action@v2.x
-        with:
-          route: GET /repos/{owner}/{repo}/pulls/{pull_number}
-          owner: ${{ github.event.repository.owner.login }}
-          repo: ${{ github.event.repository.name }}
-          pull_number: ${{ github.event.inputs.number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - id: escape
-        name: Check for escape chars
-        run: |
-          if ${{ contains(fromJson(steps.get_pull.outputs.data).head.label, '"') }}
-          then
-            exit 1
-          else
-              exit 0
-          fi
-
   cypress:
-    needs: check
     runs-on: ubuntu-latest
-    timeout-minutes: 15 
+    timeout-minutes: 15
     container: cypress/browsers:node14.17.0-chrome91-ff89
     steps:
       - name: Checkout
@@ -51,7 +25,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-            
+
       - name: Cache Cypress binary
         uses: actions/cache@v2
         with:
@@ -59,7 +33,7 @@ jobs:
           key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/package.json') }}
           restore-keys: |
             cypress-${{ runner.os }}-cypress-
-            
+
       - name: install dependencies and verify Cypress
         env:
           # make sure every Cypress install prints minimal information
@@ -70,7 +44,7 @@ jobs:
           npx cypress cache list
           npx cypress verify
           npx cypress info
-          
+
       - name: Cypress run
         uses: cypress-io/github-action@v2.10.2
         with:
