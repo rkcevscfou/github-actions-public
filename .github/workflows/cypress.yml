@@ -6,6 +6,9 @@ on:
       number:
         description: "Pull Request Number"
         required: true
+      branch:
+        description: "Branch Name"
+        required: true
 jobs:
   cypress:
     runs-on: ubuntu-latest
@@ -53,6 +56,7 @@ jobs:
           record: true
           group: ubuntu-regression
         env:
+          COMMIT_INFO_BRANCH: ${{ github.event.inputs.branch }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           CI: "true"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

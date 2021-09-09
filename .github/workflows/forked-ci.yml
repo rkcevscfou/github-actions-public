@@ -30,52 +30,21 @@ jobs:
               exit 0
           fi
 
-  cypress:
+  trigger-cypress:
     needs: check
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    container: cypress/browsers:node14.17.0-chrome91-ff89
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: octokit/request-action@v2.x
+        id: dispatch_cypress
         with:
-          ref: "refs/pull/${{ github.event.inputs.number }}/head"
-          fetch-depth: 0
-
-      - name: Cache central NPM modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Cache Cypress binary
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/Cypress
-          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            cypress-${{ runner.os }}-cypress-
-
-      - name: install dependencies and verify Cypress
+          route: POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches
+          owner: ${{ github.event.repository.owner.login }}
+          repo: ${{ github.event.repository.name }}
+          workflow_id: "cypress.yml"
+          ref: "main"
+          inputs: '{"number": "${{ github.event.inputs.number }}", "branch": "${{ github.head_ref }}"}'
         env:
-          # make sure every Cypress install prints minimal information
-          CI: 1
-        run: |
-          npm ci
-          npx cypress cache path
-          npx cypress cache list
-          npx cypress verify
-          npx cypress info
-
-      - name: Cypress run
-        uses: cypress-io/github-action@v2.10.2
-        with:
-          browser: chrome
-        env:
-          CI: "true"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
 
   chromatic:
     needs: check
@@ -89,4 +58,4 @@ jobs:
         with:
           node-version: ">=14.16.0 14"
       - run: npm ci
-      - run: npx chromatic@latest --project-token ${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-once-uploaded --branch-name="${{ needs.check.output.branch_name }}"
+      - run: npx chromatic@latest --project-token ${{ secrets.CHROMATIC_PROJECT_TOKEN }} --exit-once-uploaded --branch-name="${{ needs.check.outputs.branch_name }}"
