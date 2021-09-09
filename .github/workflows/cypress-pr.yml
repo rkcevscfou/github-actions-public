@@ -16,9 +16,9 @@ jobs:
           repo: ${{ github.event.repository.name }}
           workflow_id: "cypress.yml"
           ref: "main"
-          body: '{"inputs": {"number": "${{ github.event.pull_request.number }}"}}'
+          inputs: '{"number": "${{ github.event.pull_request.number }}"}}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo response: ${{ steps.dispatch_cypress.outputs.status }}"
-      - run: "echo response: ${{ github.event.pull_request.number }}"
+      - run: "echo PR number: ${{ github.event.pull_request.number }}"
 
