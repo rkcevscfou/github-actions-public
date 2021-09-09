@@ -5,6 +5,9 @@ on:
       number:
         description: "Pull Request Number"
         required: true
+      branch:
+        description: "Branch Name"
+        required: true
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -42,7 +45,7 @@ jobs:
           repo: ${{ github.event.repository.name }}
           workflow_id: "cypress.yml"
           ref: "main"
-          inputs: '{"number": "${{ github.event.inputs.number }}", "branch": "${{ github.head_ref }}"}'
+          inputs: '{"number": "${{ github.event.inputs.number }}", "branch": "${{ github.event.inputs.branch }}"}'
         env:
           GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
 
