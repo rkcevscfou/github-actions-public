@@ -19,6 +19,6 @@ jobs:
           inputs: '{"number": "${{ github.event.pull_request.number }}"}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: "echo response: ${{ steps.dispatch_cypress.outputs.status }}"
+      - run: "echo response: ${{ steps.dispatch_cypress.outputs.status }} ${{ steps.dispatch_cypress.outputs.headers }} ${{ steps.dispatch_cypress.outputs.data }}"
       - run: "echo PR number: ${{ github.event.pull_request.number }}"
 
