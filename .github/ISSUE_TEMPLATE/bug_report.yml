@@ -44,7 +44,7 @@ body:
     attributes:
       label: JIRA Ticket (Sage Only)
       description: >- 
-        Please include any related JIRA ticket numbers. If we accept this report, we'll create another JIRA ticket and we'll add a `relates to` link to your issues.
+        Please include any related JIRA ticket numbers. If we accept this report, we'll create another JIRA ticket and we'll add a `relates to` link to your tickets.
       placeholder: FE-123, SBS-456
   - type: textarea
     id: suggested-solution
