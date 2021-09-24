@@ -48,7 +48,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
 
   trigger-chromatic:
-    needs: check
     runs-on: ubuntu-latest
     steps:
       - uses: octokit/request-action@v2.x
@@ -58,10 +57,10 @@ jobs:
           owner: ${{ github.event.repository.owner.login }}
           repo: ${{ github.event.repository.name }}
           workflow_id: "chromatic.yml"
-          ref: "master"
-          inputs: '{"number": "${{ github.event.pull_request.number }}"}'
+          ref: "main"
+          inputs: '{"number": "${{ github.event.pull_request.number }}", "branch": "${{ github.head_ref }}"}'
         env:
-          GITHUB_TOKEN: ${{ secrets.CYPRESS_WORKFLOW_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
 
     # runs-on: ubuntu-latest
     # steps:
