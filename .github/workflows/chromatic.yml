@@ -6,9 +6,9 @@ on:
       number:
         description: "Pull Request Number"
         required: true
-    branch:
-      description: "Branch Name"
-      required: true
+      branch:
+        description: "Branch Name"
+        required: true
 
 jobs:
   chromatic:
