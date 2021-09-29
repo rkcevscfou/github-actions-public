@@ -10,7 +10,7 @@ export default {
   },
 };
 
-const Template = (args) => <Button {...args} />;
+const Template = (args) => <pre>{JSON.stringify(process.env, null, 2)}</pre>;
 
 export const Primary = Template.bind({});
 Primary.args = {
